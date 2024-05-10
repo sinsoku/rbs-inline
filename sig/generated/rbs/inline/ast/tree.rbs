@@ -1,0 +1,84 @@
+# Generated from lib/rbs/inline/ast/tree.rb with RBS::Inline
+
+module RBS
+  module Inline
+    module AST
+      class Tree
+        type tree = token | Tree | Types::t | MethodType | nil
+
+        type token = [ Symbol, String ]
+
+        attr_reader trees: Array[tree]
+
+        attr_reader type: Symbol
+
+        attr_reader non_trivia_trees: Array[tree]
+
+        # @rbs type: Symbol
+        def initialize: (Symbol type) -> void
+
+        # @rbs tok: tree
+        def <<: (tree tok) -> self
+
+        def to_s: () -> String
+
+        # Returns n-th token from the children
+        #
+        # Raises if the value is not a token nor `nil`.
+        #
+        # @rbs index: Integer
+        def nth_token: (Integer index) -> token?
+
+        # Returns n-th token from the children
+        #
+        # Returns `nil` if the value is not a token.
+        #
+        # @rbs index: Integer
+        # @rbs returns token?
+        def nth_token?: (Integer index) -> token?
+
+        # Returns n-th token from the children
+        #
+        # Raises if the value is not a token.
+        #
+        # @rbs index: Integer
+        # @rbs returns token
+        def nth_token!: (Integer index) -> token
+
+        # Returns n-th tree (or `nil`) from the children
+        #
+        # Raises when the element is not a Tree nor `nil`.
+        #
+        # @rbs index: Integer
+        # @rbs returns Tree? -- `Tree` object or `nil`
+        def nth_tree: (Integer index) -> Tree?
+
+        # Returns n-th tree (or `nil`) from the children
+        #
+        # @rbs index: Integer
+        # @rbs returns Tree? -- `Tree` object, or `nil` otherwise
+        def nth_tree?: (Integer index) -> Tree?
+
+        # Returns n-th tree from the children
+        #
+        # Raises if the value is not a Tree.
+        #
+        # @rbs index: Integer
+        # @rbs returns Tree -- `Tree` object
+        def nth_tree!: (Integer index) -> Tree
+
+        def nth_type: (untyped index) -> untyped
+
+        def nth_type?: (untyped index) -> untyped
+
+        def nth_type!: (untyped index) -> untyped
+
+        def nth_method_type: (untyped index) -> untyped
+
+        def nth_method_type?: (untyped index) -> untyped
+
+        def nth_method_type!: (untyped index) -> untyped
+      end
+    end
+  end
+end

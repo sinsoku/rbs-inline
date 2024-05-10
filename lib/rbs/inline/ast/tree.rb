@@ -2,17 +2,22 @@ module RBS
   module Inline
     module AST
       class Tree
-        attr_reader :trees
-        attr_reader :type
-        attr_reader :non_trivia_trees
+        # @rbs! type token = [Symbol, String]
+        # @rbs! type tree = token | Tree | Types::t | MethodType | nil
 
-        def initialize(type)
+        attr_reader :trees #:: Array[tree]
+        attr_reader :type #:: Symbol
+        attr_reader :non_trivia_trees #:: Array[tree]
+
+        # @rbs type: Symbol
+        def initialize(type) #:: void
           @type = type
           @trees = []
           @non_trivia_trees = []
         end
 
-        def <<(tok)
+        # @rbs tok: tree
+        def <<(tok) #:: self
           trees << tok
           unless tok.is_a?(Array) && tok[0] == :tWHITESPACE
             non_trivia_trees << tok
@@ -20,7 +25,7 @@ module RBS
           self
         end
 
-        def to_s
+        def to_s #:: String
           buf = +""
 
           trees.each do |tree|
@@ -39,7 +44,12 @@ module RBS
           buf
         end
 
-        def nth_token(index)
+        # Returns n-th token from the children
+        #
+        # Raises if the value is not a token nor `nil`.
+        #
+        # @rbs index: Integer
+        def nth_token(index) #:: token?
           tok = non_trivia_trees[index]
           case tok
           when Array, nil
@@ -49,6 +59,12 @@ module RBS
           end
         end
 
+        # Returns n-th token from the children
+        #
+        # Returns `nil` if the value is not a token.
+        #
+        # @rbs index: Integer
+        # @rbs returns token?
         def nth_token?(index)
           tok = non_trivia_trees[index]
           case tok
@@ -59,10 +75,22 @@ module RBS
           end
         end
 
+        # Returns n-th token from the children
+        #
+        # Raises if the value is not a token.
+        #
+        # @rbs index: Integer
+        # @rbs returns token
         def nth_token!(index)
           nth_token(index) || raise
         end
 
+        # Returns n-th tree (or `nil`) from the children
+        #
+        # Raises when the element is not a Tree nor `nil`.
+        #
+        # @rbs index: Integer
+        # @rbs returns Tree? -- `Tree` object or `nil`
         def nth_tree(index)
           tok = non_trivia_trees[index]
           case tok
@@ -73,6 +101,10 @@ module RBS
           end
         end
 
+        # Returns n-th tree (or `nil`) from the children
+        #
+        # @rbs index: Integer
+        # @rbs returns Tree? -- `Tree` object, or `nil` otherwise
         def nth_tree?(index)
           tok = non_trivia_trees[index]
           case tok
@@ -83,10 +115,15 @@ module RBS
           end
         end
 
+        # Returns n-th tree from the children
+        #
+        # Raises if the value is not a Tree.
+        #
+        # @rbs index: Integer
+        # @rbs returns Tree -- `Tree` object
         def nth_tree!(index)
           nth_tree(index) || raise
         end
-
 
         def nth_type(index)
           tok = non_trivia_trees[index]

@@ -1,10 +1,23 @@
 module RBS
   module Inline
     module AST
+      # CommentLines represents consecutive comments
+      #
+      # The comments construct one String.
+      #
+      # ```ruby
+      # # Hello       <-- Comment1
+      # # World       <-- Comment2
+      # ```
+      #
+      # We want to get a String of comment1 and comment2, `"Hello\nWorld".
+      # And want to translate a location in the string into the location in comment1 and comment2.
+      #
       class CommentLines
-        attr_reader :comments
+        attr_reader :comments #:: Array[[Prism::Comment, Integer]]
 
-        def initialize(comments)
+        # @rbs comments: Array[Prism::Comment]
+        def initialize(comments) #:: void
           offsets = comments.map do |comment|
             comment.location.slice.index(/[^#\s]/) || 1
           end
@@ -18,11 +31,12 @@ module RBS
           end
         end
 
-        def string
+        def string #:: String
           comments.map {|comment, offset| comment.location.slice[offset..] }.join("\n")
         end
 
-        def comment_location(index)
+        # @rbs index: Integer
+        def comment_location(index) #:: [Prism::Comment, Integer]?
           comments.each do |comment, offset|
             comment_length = comment.location.length
 

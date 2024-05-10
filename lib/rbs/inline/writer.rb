@@ -1,28 +1,35 @@
 module RBS
   module Inline
     class Writer
-      attr_reader :output
-      attr_reader :writer
+      attr_reader :output #:: String
+      attr_reader :writer #:: RBS::Writer
 
-      def initialize(buffer = +"")
+      # @rbs buffer: String
+      def initialize(buffer = +"") #:: void
         @output = buffer
         @writer = RBS::Writer.new(out: StringIO.new(buffer))
       end
 
+      # @rbs uses: Array[AST::Annotations::Use]
+      # @rbs decls: Array[AST::Declarations::t]
+      # @rbs returns void
       def self.write(uses, decls)
         writer = Writer.new()
         writer.write(uses, decls)
         writer.output
       end
 
-      def header(*lines)
+      # @rbs lines: Array[String]
+      def header(*lines) #:: void
         lines.each do |line|
           writer.out.puts("# " + line)
         end
         writer.out.puts
       end
 
-      def write(uses, decls)
+      # @rbs uses: Array[AST::Annotations::Use]
+      # @rbs decls: Array[AST::Declarations::t]
+      def write(uses, decls) #:: void
         use_dirs = uses.map do |use|
           RBS::AST::Directives::Use.new(
             clauses: use.clauses,
@@ -37,6 +44,8 @@ module RBS
         writer.write(use_dirs + rbs)
       end
 
+      # @rbs decl: AST::Declarations::t
+      # @rbs returns RBS::AST::Declarations::t?
       def translate_decl(decl)
         case decl
         when AST::Declarations::ClassDecl
@@ -48,7 +57,8 @@ module RBS
         end
       end
 
-      def translate_class_decl(decl)
+      # @rbs decl: AST::Declarations::ClassDecl
+      def translate_class_decl(decl) #:: RBS::AST::Declarations::Class?
         return unless decl.class_name
 
         if decl.comments
@@ -82,7 +92,8 @@ module RBS
         )
       end
 
-      def translate_module_decl(decl)
+      # @rbs decl: AST::Declarations::ModuleDecl
+      def translate_module_decl(decl) #:: RBS::AST::Declarations::Module?
         return unless decl.module_name
 
         if decl.comments
@@ -118,7 +129,8 @@ module RBS
         )
       end
 
-      def translate_constant_decl(decl)
+      # @rbs decl: AST::Declarations::ConstantDecl
+      def translate_constant_decl(decl) #:: RBS::AST::Declarations::Constant?
         return unless decl.constant_name
 
         if decl.comments
@@ -133,6 +145,7 @@ module RBS
         )
       end
 
+      #:: (AST::Members::t) -> Array[RBS::AST::Members::t | RBS::AST::Declarations::t]?
       def translate_member(member)
         case member
         when AST::Members::RubyDef

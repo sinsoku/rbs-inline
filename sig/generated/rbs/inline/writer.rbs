@@ -1,0 +1,42 @@
+# Generated from lib/rbs/inline/writer.rb with RBS::Inline
+
+module RBS
+  module Inline
+    class Writer
+      attr_reader output: String
+
+      attr_reader writer: RBS::Writer
+
+      # @rbs buffer: String
+      def initialize: (?String buffer) -> void
+
+      # @rbs uses: Array[AST::Annotations::Use]
+      # @rbs decls: Array[AST::Declarations::t]
+      # @rbs returns void
+      def self.write: (Array[AST::Annotations::Use] uses, Array[AST::Declarations::t] decls) -> void
+
+      # @rbs lines: Array[String]
+      def header: (*String lines) -> void
+
+      # @rbs uses: Array[AST::Annotations::Use]
+      # @rbs decls: Array[AST::Declarations::t]
+      def write: (Array[AST::Annotations::Use] uses, Array[AST::Declarations::t] decls) -> void
+
+      # @rbs decl: AST::Declarations::t
+      # @rbs returns RBS::AST::Declarations::t?
+      def translate_decl: (AST::Declarations::t decl) -> RBS::AST::Declarations::t?
+
+      # @rbs decl: AST::Declarations::ClassDecl
+      def translate_class_decl: (AST::Declarations::ClassDecl decl) -> RBS::AST::Declarations::Class?
+
+      # @rbs decl: AST::Declarations::ModuleDecl
+      def translate_module_decl: (AST::Declarations::ModuleDecl decl) -> RBS::AST::Declarations::Module?
+
+      # @rbs decl: AST::Declarations::ConstantDecl
+      def translate_constant_decl: (AST::Declarations::ConstantDecl decl) -> RBS::AST::Declarations::Constant?
+
+      # :: (AST::Members::t) -> Array[RBS::AST::Members::t | RBS::AST::Declarations::t]?
+      def translate_member: (AST::Members::t) -> Array[RBS::AST::Members::t | RBS::AST::Declarations::t]?
+    end
+  end
+end
